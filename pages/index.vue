@@ -1,4 +1,28 @@
 <template>
+    <v-sheet class="mx-auto">
+        <v-form @submit.prevent>
+            <v-container>
+                <v-row>
+                    <v-col
+                            cols="12"
+                            md="8"
+                    >
+                        <v-text-field
+                                v-model="newTodo"
+                                :rules="rules"
+                                label="New todo"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col
+                            cols="12"
+                            md="4"
+                    >
+                        <v-btn type="submit" color="success" block class="mt-2" @click="todos.push({ id: (Number(todos.at(-1)?.id) || 0) + 1, todo: newTodo, completed: false })">Add new todo</v-btn>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-form>
+    </v-sheet>
     <v-table density="compact">
         <thead>
         <tr>
@@ -14,8 +38,8 @@
                 :key="item.id"
                 :class="{ completed: item.completed }"
         >
-            <td class="text-transform">{{ item.id }}</td>
-            <td class="text-transform">{{ item.todo }}</td>
+            <td class="text">{{ item.id }}</td>
+            <td class="text cell-size">{{ item.todo }}</td>
             <td class="text-xs-center">
                 <v-checkbox
                         v-model="todos[index].completed"
@@ -45,6 +69,13 @@
             return [...result.todos];
         }
     });
+    let newTodo = '';
+
+    function remove(index: number) {
+        console.log('todos', todos);
+        console.log('index', index);
+        // todos.splice(index, 1);
+    }
 </script>
 
 <style scoped>
@@ -52,7 +83,7 @@
         color: blue;
     }
 
-    tr.completed .text-transform{
+    tr.completed .text{
         text-decoration-line: line-through;
     }
 </style>
