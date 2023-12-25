@@ -17,13 +17,13 @@
                             cols="12"
                             md="4"
                     >
-                        <v-btn type="submit" color="success" block class="mt-2" @click="todos.push({ id: (Number(todos.at(-1)?.id) || 0) + 1, todo: newTodo, completed: false })">Add new todo</v-btn>
+                        <v-btn type="submit" color="success" block class="mt-2" @click="add()">Add new todo</v-btn>
                     </v-col>
                 </v-row>
             </v-container>
         </v-form>
     </v-sheet>
-    <v-table density="compact">
+    <v-table fixed-header="true" class="table">
         <thead>
         <tr>
             <th class="text-left">Id</th>
@@ -34,7 +34,7 @@
         </thead>
         <tbody>
         <tr
-                v-for="(item, index) in todos"
+                v-for="(item, index) in todosList"
                 :key="item.id"
                 :class="{ completed: item.completed }"
         >
@@ -42,14 +42,14 @@
             <td class="text cell-size">{{ item.todo }}</td>
             <td class="text-xs-center">
                 <v-checkbox
-                        v-model="todos[index].completed"
+                        v-model="todosList[index].completed"
                 ></v-checkbox>
             </td>
             <td class="text-xs-center">
                 <v-btn
                         class="ma-2"
                         color="red"
-                        @click="todos.splice(index, 1)"
+                        @click="remove(index)"
                 >
                     Удалить
                     <v-icon
@@ -64,17 +64,41 @@
 </template>
 
 <script setup lang="ts">
+    interface Todo { id: number; todo: string; completed: boolean };
+    /**
+     * Text for creating a new to-do
+     */
+    let newTodo = '';
+
+    /**
+     * To-do list array
+     */
+    let todosList: Todo[] = [];
+
+    /**
+     * To-do list retrieval
+     */
     const { data: todos } = await useFetch('https://dummyjson.com/todos', {
         transform: (result: { todos: []; }) => {
             return [...result.todos];
         }
     });
-    let newTodo = '';
+    todosList = toRef(todos._rawValue);
 
+    /**
+     * Item deletion function
+     * @param index {number}
+     */
     function remove(index: number) {
-        console.log('todos', todos);
-        console.log('index', index);
-        // todos.splice(index, 1);
+        unref(todosList).splice(index, 1);
+    }
+
+    /**
+     * Item addition function
+     */
+    function add() {
+        const todosListLink = unref(todosList) as Todo[];
+        todosListLink.push({ id: (Number(todosListLink.at(-1)?.id) || 0) + 1, todo: newTodo, completed: false })
     }
 </script>
 
@@ -85,5 +109,11 @@
 
     tr.completed .text{
         text-decoration-line: line-through;
+    }
+    .cell-size {
+        width: 100%;
+    }
+    .table {
+        margin: 20px;
     }
 </style>
