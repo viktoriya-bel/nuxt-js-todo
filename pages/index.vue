@@ -123,6 +123,7 @@
      * Item addition function
      */
     function add() {
+        if (!newTodo.length) return;
         const todosListLink = unref(todosList) as Todo[];
         todosListLink.push({ id: (Number(todosListLink.at(-1)?.id) || 0) + 1, todo: newTodo, completed: false, editable: false })
     }
