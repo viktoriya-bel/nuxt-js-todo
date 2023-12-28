@@ -30,6 +30,7 @@
             <th class="text-left">Todo</th>
             <th class="text-left">Completed</th>
             <th class="text-left"></th>
+            <th class="text-left"></th>
         </tr>
         </thead>
         <tbody>
@@ -39,11 +40,34 @@
                 :class="{ completed: item.completed }"
         >
             <td class="text">{{ item.id }}</td>
-            <td class="text cell-size">{{ item.todo }}</td>
+            <td class="text cell-size">
+                {{ editIndex }}
+                <template v-if="item?.editable">
+                    111
+                    <v-text-field
+                            v-model="item.todo"
+                    ></v-text-field>
+                </template>
+                <template v-else>
+                    222
+                    {{ item.todo }}
+                </template>
+            </td>
             <td class="text-xs-center">
                 <v-checkbox
                         v-model="todosList[index].completed"
                 ></v-checkbox>
+            </td>
+            <td class="text-xs-center">
+                <v-btn
+                        class="ma-2"
+                        :color="item?.editable ? 'success' : 'orange-darken-2'"
+                        @click="edit(index)"
+                >
+                    <v-icon
+                            icon="mdi-pencil"
+                    ></v-icon>
+                </v-btn>
             </td>
             <td class="text-xs-center">
                 <v-btn
@@ -64,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-    interface Todo { id: number; todo: string; completed: boolean };
+    interface Todo { id: number; todo: string; completed: boolean, editable?: boolean };
     /**
      * Text for creating a new to-do
      */
@@ -76,6 +100,11 @@
     let todosList: Todo[] = [];
 
     /**
+     * Index of the selected item for editing
+     */
+    let editIndex: number = -1;
+
+    /**
      * To-do list retrieval
      */
     const { data: todos } = await useFetch('https://dummyjson.com/todos', {
@@ -83,7 +112,7 @@
             return [...result.todos];
         }
     });
-    todosList = toRef(todos._rawValue);
+    todosList = toRef(unref(todos));
 
     /**
      * Item deletion function
@@ -98,7 +127,22 @@
      */
     function add() {
         const todosListLink = unref(todosList) as Todo[];
-        todosListLink.push({ id: (Number(todosListLink.at(-1)?.id) || 0) + 1, todo: newTodo, completed: false })
+        todosListLink.push({ id: (Number(todosListLink.at(-1)?.id) || 0) + 1, todo: newTodo, completed: false, editable: false })
+    }
+
+    /**
+     * Function allowing to edit the name of the case
+     * @param index {number}
+     */
+    function edit(index: number) {
+        if (editIndex >= 0) unref(todosList)[editIndex]['editable'] = false;
+        if (editIndex === index) {
+            editIndex = -1;
+            return;
+        }
+
+        editIndex = index;
+        unref(todosList)[editIndex]['editable'] = true;
     }
 </script>
 
