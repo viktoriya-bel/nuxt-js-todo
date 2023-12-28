@@ -41,15 +41,12 @@
         >
             <td class="text">{{ item.id }}</td>
             <td class="text cell-size">
-                {{ editIndex }}
                 <template v-if="item?.editable">
-                    111
                     <v-text-field
                             v-model="item.todo"
                     ></v-text-field>
                 </template>
                 <template v-else>
-                    222
                     {{ item.todo }}
                 </template>
             </td>
