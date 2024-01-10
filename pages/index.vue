@@ -35,7 +35,7 @@
         </thead>
         <tbody>
         <tr
-                v-for="(item, index) in todosList"
+                v-for="(item, index) in getTodos"
                 :key="item.id"
                 :class="{ completed: item.completed }"
         >
@@ -52,7 +52,7 @@
             </td>
             <td class="text-xs-center">
                 <v-checkbox
-                        v-model="todosList[index].completed"
+                        v-model="getTodos[index].completed"
                 ></v-checkbox>
             </td>
             <td class="text-xs-center">
@@ -103,11 +103,6 @@
     let newTodo = '';
 
     /**
-     * To-do list array
-     */
-    let todosList: Todo[] = [];
-
-    /**
      * Index of the selected item for editing
      */
     let editIndex: number = -1;
@@ -117,15 +112,14 @@
      */
     const todoStore = useTodoStore();
     todoStore.setTodos();
-    const { isLoading, getTodos } = storeToRefs(todoStore)
-    todosList = toRef(getTodos);
+    const { isLoading, getTodos } = storeToRefs(todoStore);
 
     /**
      * Item deletion function
      * @param index {number}
      */
     function remove(index: number) {
-        unref(todosList).splice(index, 1);
+        todoStore.remove(index);
     }
 
     /**
@@ -133,8 +127,7 @@
      */
     function add() {
         if (!newTodo.length) return;
-        const todosListLink = unref(todosList) as Todo[];
-        todosListLink.push({ id: (Number(todosListLink.at(-1)?.id) || 0) + 1, todo: newTodo, completed: false, editable: false })
+        todoStore.add(newTodo);
     }
 
     /**
@@ -142,14 +135,7 @@
      * @param index {number}
      */
     function edit(index: number) {
-        if (editIndex >= 0) unref(todosList)[editIndex]['editable'] = false;
-        if (editIndex === index) {
-            editIndex = -1;
-            return;
-        }
-
-        editIndex = index;
-        unref(todosList)[editIndex]['editable'] = true;
+        todoStore.edit(index);
     }
 </script>
 

@@ -7,4 +7,7 @@ export interface Todo {
 export interface TodoStore {
     todos : Todo[];
     loading: boolean;
+    total: number;
+    lastID: number;
+    editIndex: number;
 }

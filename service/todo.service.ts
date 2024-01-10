@@ -1,12 +1,8 @@
 import {Todo} from "~/interface/todo.interface";
 
 export class TodoService {
-    static async setTodos(): Promise<Todo[]> {
-        const {data: todos} = await useFetch('https://dummyjson.com/todos', {
-            transform: (result: { todos: []; }) => {
-                return [...result.todos];
-            }
-        });
-        return todos._rawValue;
+    static async setTodos(): Promise<{ todos: Todo[], total: number }> {
+        const result = await fetch('https://dummyjson.com/todos');
+        return await result.json();
     }
 }
