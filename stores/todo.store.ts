@@ -1,5 +1,5 @@
 import {Todo, TodoStore} from "~/interface/todo.interface";
-import {TodoService} from "~/service/todo.service";
+import {TodoService} from "~/services/todo.service";
 
 const todoService = TodoService;
 
