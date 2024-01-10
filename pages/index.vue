@@ -82,10 +82,21 @@
         </tr>
         </tbody>
     </v-table>
+    <div v-if="isLoading" class="progress-block">
+        <div class="progress-text">Идёт загрузка...</div>
+        <v-progress-linear
+                color="deep-purple-accent-4"
+                indeterminate
+                rounded
+                height="6"
+        ></v-progress-linear>
+    </div>
 </template>
 
 <script setup lang="ts">
-    interface Todo { id: number; todo: string; completed: boolean, editable?: boolean };
+
+    import {Todo} from "~/interface/todo.interface";
+
     /**
      * Text for creating a new to-do
      */
@@ -104,12 +115,10 @@
     /**
      * To-do list retrieval
      */
-    const { data: todos } = await useFetch('https://dummyjson.com/todos', {
-        transform: (result: { todos: []; }) => {
-            return [...result.todos];
-        }
-    });
-    todosList = toRef(unref(todos));
+    const todoStore = useTodoStore();
+    todoStore.setTodos();
+    const { isLoading, getTodos } = storeToRefs(todoStore)
+    todosList = toRef(getTodos);
 
     /**
      * Item deletion function
@@ -157,5 +166,12 @@
     }
     .table {
         margin: 20px;
+    }
+    .progress-block{
+        max-width: 300px;
+        margin: auto;
+    }
+    .progress-text{
+        text-align: center;
     }
 </style>

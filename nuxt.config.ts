@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-    'vuetify-nuxt-module'
+    'vuetify-nuxt-module',
+    '@pinia/nuxt',
   ],
   vuetify: {
     moduleOptions: {},
