@@ -82,7 +82,7 @@
         </tr>
         </tbody>
     </v-table>
-    <div v-if="isLoading" class="progress-block">
+    <div v-if="isLoading" class="bottom-block">
         <div class="progress-text">Идёт загрузка...</div>
         <v-progress-linear
                 color="deep-purple-accent-4"
@@ -91,28 +91,23 @@
                 height="6"
         ></v-progress-linear>
     </div>
+    <div v-if="isMore && !isLoading"  class="bottom-block">
+        <v-btn type="submit" color="deep-purple-accent-4" block class="mt-2" @click="more()">Загрузить ещё</v-btn>
+    </div>
 </template>
 
 <script setup lang="ts">
-
-    import {Todo} from "~/interface/todo.interface";
-
     /**
      * Text for creating a new to-do
      */
     let newTodo = '';
 
     /**
-     * Index of the selected item for editing
-     */
-    let editIndex: number = -1;
-
-    /**
      * To-do list retrieval
      */
     const todoStore = useTodoStore();
     todoStore.setTodos();
-    const { isLoading, getTodos } = storeToRefs(todoStore);
+    const { isLoading, getTodos, isMore } = storeToRefs(todoStore);
 
     /**
      * Item deletion function
@@ -137,6 +132,13 @@
     function edit(index: number) {
         todoStore.edit(index);
     }
+
+    /**
+     * Function for data pagination
+     */
+    function more() {
+        todoStore.more();
+    }
 </script>
 
 <style scoped>
@@ -153,9 +155,10 @@
     .table {
         margin: 20px;
     }
-    .progress-block{
+    .bottom-block{
         max-width: 300px;
         margin: auto;
+        padding-bottom: 100px;
     }
     .progress-text{
         text-align: center;

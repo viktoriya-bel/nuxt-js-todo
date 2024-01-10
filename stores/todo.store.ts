@@ -9,12 +9,15 @@ export const useTodoStore = defineStore('todo', {
         todos: [],
         loading: false,
         total: 0,
+        skip: 0,
+        limit: 10,
         lastID: null,
         editIndex: -1,
     }),
     getters: {
-        getTodos: (state: TodoStore) => state.todos,
+        getTodos: (state: TodoStore) => state.todos.sort((a, b) => a.id > b.id ? 1 : -1),
         isLoading: (state: TodoStore) => state.loading,
+        isMore: (state: TodoStore) => state.skip + state.limit < state.total,
     },
     actions: {
         /**
@@ -22,10 +25,17 @@ export const useTodoStore = defineStore('todo', {
          */
         async setTodos() {
             this.loading = true;
-            const { todos, total } = await todoService.setTodos();
-            this.todos = todos;
+            const { todos, total } = await todoService.setTodos(this.skip, this.limit);
+            this.todos.push(...todos);
             this.total = total;
             this.loading = false;
+        },
+        /**
+         * Method for data pagination
+         */
+        async more() {
+            this.skip += this.limit;
+            this.setTodos();
         },
         /**
          * Item deletion function

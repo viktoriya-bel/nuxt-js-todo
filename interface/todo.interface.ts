@@ -8,6 +8,8 @@ export interface TodoStore {
     todos : Todo[];
     loading: boolean;
     total: number;
+    skip: number;
+    limit: number;
     lastID: number;
     editIndex: number;
 }
