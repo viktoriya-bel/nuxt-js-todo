@@ -8,5 +8,10 @@ export default defineNuxtConfig({
   vuetify: {
     moduleOptions: {},
     vuetifyOptions: {}
+  },
+  components: {
+    dirs: [
+      '~/components',
+    ]
   }
 })
