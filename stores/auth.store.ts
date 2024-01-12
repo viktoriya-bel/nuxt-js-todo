@@ -12,12 +12,17 @@ export const useAuthStore = defineStore('auth', {
         getId: (state: AuthStoreInterface) => state.id,
     },
     actions: {
+        /**
+         * User authorization
+         * @param username {string}
+         * @param password {string}
+         */
         async login(username: string, password: string) {
             const { id, token, message } = await authService.login(username, password);
-            this.id = id;
-            this.token = token;
             if (message)
                 throw new Error("Произошла ошибка!");
+            this.id = id;
+            this.token = token;
         }
     }
 });

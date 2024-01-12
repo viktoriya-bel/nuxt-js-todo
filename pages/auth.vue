@@ -45,15 +45,16 @@
     const router = useRouter();
     const authStore = useAuthStore();
 
-
+    /**
+     * User authorization function
+     */
     async function login() {
         if (userName.value.length && password.value.length){
             authStore.login(userName.value, password.value).then(() => {
-                router.push('/');
+                router.push('/todo');
             }).catch((error: string) => {
                 alert(error);
             });
-
         }
     }
 </script>
