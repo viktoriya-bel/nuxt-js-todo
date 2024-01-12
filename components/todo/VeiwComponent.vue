@@ -32,19 +32,19 @@
                 ></v-checkbox>
             </td>
             <td class="text-xs-center">
-                <TodoButtonComponent classString="ma-2" :colorString="item?.editable ? 'success' : 'orange-darken-2'" @clickBtn="$emit('clickEdit', index)">
+                <BaseButtonComponent classString="ma-2" :colorString="item?.editable ? 'success' : 'orange-darken-2'" @clickBtn="$emit('clickEdit', index)">
                     <v-icon
                             icon="mdi-pencil"
                     ></v-icon>
-                </TodoButtonComponent>
+                </BaseButtonComponent>
             </td>
             <td class="text-xs-center">
-                <TodoButtonComponent text="Удалить" classString="ma-2" colorString="red" @clickBtn="$emit('clickRemove', index)">
+                <BaseButtonComponent text="Удалить" classString="ma-2" colorString="red" @clickBtn="$emit('clickRemove', index)">
                     <v-icon
                             end
                             icon="mdi-cancel"
                     ></v-icon>
-                </TodoButtonComponent>
+                </BaseButtonComponent>
             </td>
         </tr>
         </tbody>

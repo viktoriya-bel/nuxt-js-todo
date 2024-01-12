@@ -1,5 +1,5 @@
-import {Todo, TodoStore} from "~/interface/todo.interface";
-import {TodoService} from "~/services/todo.service";
+import { TodoStoreInterface } from "~/interface/todo.interface";
+import { TodoService } from "~/services/todo.service";
 
 const todoService = TodoService;
 
@@ -15,9 +15,9 @@ export const useTodoStore = defineStore('todo', {
         editIndex: -1,
     }),
     getters: {
-        getTodos: (state: TodoStore) => state.todos.sort((a, b) => a.id > b.id ? 1 : -1),
-        isLoading: (state: TodoStore) => state.loading,
-        isMore: (state: TodoStore) => state.skip + state.limit < state.total,
+        getTodos: (state: TodoStoreInterface) => state.todos.sort((a, b) => a.id > b.id ? 1 : -1),
+        isLoading: (state: TodoStoreInterface) => state.loading,
+        isMore: (state: TodoStoreInterface) => state.skip + state.limit < state.total,
     },
     actions: {
         /**

@@ -1,11 +1,11 @@
-export interface Todo {
+export interface TodoInterface {
     id: number;
     todo: string;
     completed: boolean;
     editable?: boolean;
 }
-export interface TodoStore {
-    todos : Todo[];
+export interface TodoStoreInterface {
+    todos : TodoInterface[];
     loading: boolean;
     total: number;
     skip: number;

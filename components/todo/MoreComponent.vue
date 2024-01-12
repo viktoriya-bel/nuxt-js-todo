@@ -1,7 +1,7 @@
 <template>
    <div class="bottom-block">
-      <TodoButtonComponent text="Загрузить ещё" :isBlock="true" classString="ma-2" colorString="deep-purple-accent-4" @clickBtn="$emit('clickMore')">
-      </TodoButtonComponent>
+      <BaseButtonComponent text="Загрузить ещё" :isBlock="true" classString="ma-2" colorString="deep-purple-accent-4" @clickBtn="$emit('clickMore')">
+      </BaseButtonComponent>
    </div>
 </template>
 
