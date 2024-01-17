@@ -21,21 +21,33 @@ export const useTodoStore = defineStore('todo', {
     },
     actions: {
         /**
-         * Retrieving data from the server
+         * Getting the list of tasks. if the user id is passed, only this user's data will be retrieved
+         * @param id {number}
          */
-        async setTodos() {
+        async setTodos(id?: number) {
+            console.log('setTodos id', id);
             this.loading = true;
-            const { todos, total } = await todoService.setTodos(this.skip, this.limit);
+            const { todos, total } = id ? await todoService.setTodosByUser(this.skip, this.limit, id) : await todoService.setTodos(this.skip, this.limit);
             this.todos.push(...todos);
             this.total = total;
             this.loading = false;
         },
+
+        /**
+         * Data cleansing
+         */
+        async cleanData() {
+            this.todos = [];
+            this.total = 0;
+            this.skip = 0;
+        },
+
         /**
          * Method for data pagination
          */
-        async more() {
+        async more(id?: number) {
             this.skip += this.limit;
-            this.setTodos();
+            this.setTodos(id);
         },
         /**
          * Item deletion function

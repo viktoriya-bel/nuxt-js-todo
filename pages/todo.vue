@@ -1,5 +1,6 @@
 <template>
     <TodoAddComponent @clickAdd="add"></TodoAddComponent>
+    <TodoFiltersComponent @clickShowTodo="showSwitch"></TodoFiltersComponent>
     <TodoVeiwComponent :todos="getTodos" @clickEdit="edit" @clickRemove="remove"></TodoVeiwComponent>
     <TodoLoadingComponent v-if="isLoading"></TodoLoadingComponent>
     <TodoMoreComponent v-if="isMore && !isLoading" @clickMore="more()"></TodoMoreComponent>
@@ -15,6 +16,11 @@
     const todoStore = useTodoStore();
     todoStore.setTodos();
     const { isLoading, getTodos, isMore } = storeToRefs(todoStore);
+
+    /**
+     * User id
+     */
+    let id: number;
 
     /**
      * Item deletion function
@@ -45,7 +51,19 @@
      * Function for data pagination
      */
     function more() {
-        todoStore.more();
+        todoStore.more(id);
+    }
+
+    /**
+     * Function that switches the display from the whole list to the user list and back again
+     * @param isMe {boolean}
+     */
+    async function showSwitch(isMe: boolean) {
+        await todoStore.cleanData();
+        const authStore = useAuthStore();
+        const { getId } = storeToRefs(authStore);
+        id = isMe ? getId.value : null;
+        todoStore.setTodos(id);
     }
 </script>
 
